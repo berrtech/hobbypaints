@@ -1,0 +1,19 @@
+{
+  "name": "hobby-paints-collector",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "validate": "node validateHexColors.js",
+    "collect:p3": "node p3-paints-collector/index.js",
+    "collect:vallejo": "node vallejo-paints-collector/index.js",
+    "collect:citadel": "node citadel-paints-collector/index.js"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "cheerio": "^1.0.0-rc.2",
+    "lodash": "^4.17.10",
+    "mongoose": "^5.2.10",
+    "node-vibrant": "^3.0.0"
+  }
+}

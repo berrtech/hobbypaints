@@ -1,0 +1,27 @@
+{
+  "name": "hobbypaints",
+  "version": "1.0.0",
+  "scripts": {
+    "client": "cd client && yarn start",
+    "server": "nodemon server.js",
+    "start": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
+    "validateDb": "cd collectors && node validateHexColors.js",
+    "collect:p3": "cd collectors && node p3-paints-collector/index.js",
+    "collect:vallejo": "cd collectors && node vallejo-paints-collector/index.js",
+    "collect:citadel": "cd collectors && node citadel-paints-collector/index.js",
+    "collect:reaper": "cd collectors && node reaper-paints-collector/index.js",
+    "prod": "cross-env NODE_ENV=production node server.js",
+    "prod:forever": "forever start -c \"npm run prod\" ./"
+  },
+  "dependencies": {
+    "express": "^4.16.2",
+    "hex-rgb": "^3.0.0",
+    "lodash": "^4.17.10",
+    "mongoose": "^5.2.10",
+    "node-vibrant": "^3.0.0"
+  },
+  "devDependencies": {
+    "concurrently": "^3.5.0",
+    "cross-env": "^5.2.0"
+  }
+}

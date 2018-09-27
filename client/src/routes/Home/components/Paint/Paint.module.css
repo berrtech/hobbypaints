@@ -1,0 +1,50 @@
+.paint-wrapper{
+  padding: 10px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.perception-title{
+  height: 45px;
+  display: inline-block;
+}
+
+.paint{
+  /* padding: 10px; */
+  border-radius: .5rem;
+  text-align: center;
+  border: 3px solid #9eaab6;
+  -webkit-box-shadow: 8px 8px 5px -5px #9eaab6;
+  -moz-box-shadow: 8px 8px 5px -5px #9eaab6;
+  box-shadow: 8px 8px 5px -5px #9eaab6;
+}
+
+.color{
+  display: inline-block;
+  width: 60%;
+  height: 60%;
+}
+
+.base-color{
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+  height: 150px;
+  margin: 10px auto 0;
+  display: flex;
+  transition: background-color 0.3s ease-in;
+}
+
+.paint-details{
+  margin-top: 7px;
+  margin-bottom: 20px;
+}
+
+.deltaE-wrapper{
+  margin-bottom: 0;
+  padding: 10px 10px 13px 10px;
+  border-top: 3px solid black;
+}
