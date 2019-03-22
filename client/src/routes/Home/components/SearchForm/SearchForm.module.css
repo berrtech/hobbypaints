@@ -44,6 +44,17 @@
   animation: spinner 1.2s linear infinite;
 }
 
+.select{
+  display: inline-block;
+  width: auto;
+  vertical-align: middle;
+  position: relative;
+  -ms-flex: 1 1 auto;
+  flex: 1 1 auto;
+  width: 1%;
+  margin-bottom: 0;
+}
+
 @keyframes spinner {
   0% {
     transform: rotate(0deg);

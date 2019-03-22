@@ -22,6 +22,11 @@ const connect = async () => {
 
 const Paint = mongoose.model('Paint', paintSchema, 'paints')
 
+const getPaintById = async id => {
+  const paint = await Paint.findById(id)
+  return paint
+}
+
 const findClosestPaint = (color, paints) => {
   const paintsWithDistances = paints.map(paint => {
     return ({
@@ -115,11 +120,25 @@ const populateBrandPaints = async (brand, paints) => {
   return addPaints(paints)
 }
 
+RegExp.escape = function (string) {
+  return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')
+};
+
+const searchPaints = async query => {
+  if (!query) return []
+
+  const regex = new RegExp(RegExp.escape(query), 'i')
+
+  return Paint.find({ name: regex, type: paintTypes.BASIC })
+}
+
 module.exports = {
   connect,
   getAllPaints,
   getClosestPaints,
   getBrandsCount,
   populateBrandPaints,
-  areDbPaintsValid
+  areDbPaintsValid,
+  searchPaints,
+  getPaintById
 }

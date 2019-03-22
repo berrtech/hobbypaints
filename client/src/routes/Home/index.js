@@ -3,6 +3,7 @@ import SearchForm from './components/SearchForm'
 import PaintSlot from './components/PaintSlot'
 import get from 'lodash/get'
 import { isValidHexColor } from './utils'
+import { getClosestPaints } from '../../api'
 
 class Home extends React.Component {
   state = {
@@ -37,8 +38,7 @@ class Home extends React.Component {
     if (!hex || !isValidHexColor(hex)) return
     this.setState({ loading: true })
 
-    fetch('/api/closestPaints/' + hex)
-      .then(res => res.json())
+    getClosestPaints(hex)
       .then(res => {
         this.setState({
           paints: res,

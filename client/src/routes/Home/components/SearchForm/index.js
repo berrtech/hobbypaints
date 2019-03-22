@@ -1,8 +1,10 @@
 import React from 'react'
-import cn from 'classnames'
 import styles from './SearchForm.module.css'
 import { withRouter } from "react-router-dom"
+import Select from 'react-select'
 import { isValidHexColor } from '../../utils'
+import { searchPaint } from '../../../../api'
+import throttle from 'lodash/throttle'
 
 class SearchForm extends React.Component {
   constructor(props) {
@@ -12,71 +14,76 @@ class SearchForm extends React.Component {
 
     this.state = {
       value: hex || '',
-      isValid: hex ? isValidHexColor(hex) : true
+      searchResults: []
     }
+    this.throttledSearchPaint = throttle(this.searchPaint, 500, { leading: true, trailing: true })
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     const { hex } = this.props.match.params
 
     if (hex !== prevProps.match.params.hex) {
-      this.setState({ value: hex || '', isValid: true })
+      this.setState({ value: hex || '' })
     }
   }
 
-  setValue = e => {
-    e.persist()
-
-    this.setState(({ isValid }) => {
-      let isInputValid = isValidHexColor(e.target.value)
-      if (e.target.value.length && !isValid && isInputValid) {
-        isInputValid = true
-      } else if (!e.target.value.length) {
-        isInputValid = true
-      } else {
-        isInputValid = isValid
-      }
-
-      return {
-        value: e.target.value,
-        isValid: isInputValid
-      }
+  searchPaint = async (value) => {
+    const paints = await searchPaint(value)
+    this.setState({
+      searchResults: paints.map(paint => ({ label: paint.name + ' - #' + paint.hex, value: paint._id, hex: paint.hex }))
     })
   }
 
-  validate = (callback) => {
-    this.setState(({ value }) => ({
-      isValid: !value.length || isValidHexColor(value)
-    }), callback)
+  setValue = (value, { action }) => {
+
+    if (action === "set-value" ||
+      action === "input-blur" ||
+      action === "menu-close") {
+      return;
+    }
+
+    this.setState({ value })
+    this.throttledSearchPaint(value)
   }
 
   handleSubmit = e => {
     e.preventDefault();
-    this.validate(() => {
-      if (this.state.isValid) {
-        this.props.history.push(`/${this.state.value}`)
-      }
-    })
+    this.props.history.push(`/${this.state.value}`)
+  }
+
+  handleSelect = paint => {
+    this.props.history.push(`/${paint.hex}`)
   }
 
   render() {
-    const { setValue, validate, handleSubmit } = this
-    const { isValid, value } = this.state
+    const { setValue, handleSubmit, handleSelect } = this
+    const { value, searchResults } = this.state
     const { loading } = this.props
+
+    console.log(value);
+
 
     return (
       <div className={styles['search-form__wrapper']}>
         <form className={`form-inline ${styles["search-form"]}`} onSubmit={handleSubmit}>
           <div className={`input-group ${styles['search-form__input-group']}`}>
-            <input
-              type="text"
-              className={cn(`form-control`, { 'is-invalid': !isValid })}
-              placeholder='Hex Color'
-              onBlur={() => validate()}
-              value={value}
-              onChange={setValue}
+            <Select
+              onInputChange={setValue}
+              blurInputOnSelect={false} //set by default, but to be sure
+              closeMenuOnSelect={false} //prevents menu close after select, which would also result in input blur
+              inputValue={value}
+              value={null}
+              onChange={handleSelect}
+              options={searchResults}
+              backspaceRemovesValue={false}
+              isLoading={loading}
+              className={styles['select']}
+              placeholder='Hex color or paint name'
+              styles={{
+                dropdownIndicator: () => ({ display: 'none' }),
+                indicatorSeparator: () => ({ display: 'none' })
+              }}
             />
-            {loading && <div className={styles.spinner} />}
             <div className="input-group-append">
               <button type='submit' className='btn btn-primary mb-2'>Search</button>
             </div>

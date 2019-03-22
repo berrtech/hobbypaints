@@ -2,7 +2,7 @@ const path = require('path');
 const express = require('express');
 const _ = require('lodash')
 
-const { getClosestPaints, getBrandsCount } = require('./services/paints')
+const { getClosestPaints, getBrandsCount, searchPaints, getPaintById } = require('./services/paints')
 
 const brandsOrder = [
   'Citadel',
@@ -26,6 +26,16 @@ module.exports = app => {
   app.get('/api/brands/count', async (req, res) => {
     const brandsCount = await getBrandsCount()
     res.send({ count: brandsCount })
+  })
+
+  app.get('/api/paints/search', async (req, res) => {
+    const paints = await searchPaints(req.query.query)
+    res.send(paints)
+  })
+
+  app.get('/api/paints/:id', async (req, res) => {
+    let paint = await getPaintById(req.params.id)
+    res.send(paint)
   })
 
   if (process.env.NODE_ENV === 'production') {
