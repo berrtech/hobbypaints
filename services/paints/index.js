@@ -132,6 +132,28 @@ const searchPaints = async query => {
   return Paint.find({ name: regex, type: paintTypes.BASIC })
 }
 
+const updatePaint = async (id, paint) => {
+  let paintToUpdate = await Paint.findById(id)
+
+  Object.keys(paint).forEach(prop => {
+    paintToUpdate[prop] = paint[prop]
+  })
+
+  await paintToUpdate.save()
+  return paintToUpdate
+}
+
+const createPaint = async (paint) => {
+  let createdPaint = new Paint(paint)
+
+  await createdPaint.save()
+  return createdPaint
+}
+
+const deletePaint = async id => {
+  await Paint.deleteOne({ _id: id })
+}
+
 module.exports = {
   connect,
   getAllPaints,
@@ -140,5 +162,8 @@ module.exports = {
   populateBrandPaints,
   areDbPaintsValid,
   searchPaints,
-  getPaintById
+  getPaintById,
+  updatePaint,
+  createPaint,
+  deletePaint
 }

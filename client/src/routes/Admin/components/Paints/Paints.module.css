@@ -1,0 +1,26 @@
+.wrapper{
+  padding: 8px;
+}
+
+.color{
+  display: flex;
+  align-items: center;
+}
+
+.colored-block{
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 7px;
+}
+
+.create-link{
+  display: inline-block;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+
+td, th{
+  text-align: center;
+  vertical-align: middle !important;
+}

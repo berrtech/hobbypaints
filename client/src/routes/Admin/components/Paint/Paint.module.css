@@ -1,0 +1,12 @@
+.paint-form{
+  max-width: 800px;
+  margin: 80px auto 0;
+}
+
+.color-block{
+  display: block;
+  width: 38px;
+  height: 38px;
+  position: absolute;
+  left: -45px;
+}
